@@ -1,26 +1,22 @@
-import { IsString, IsNotEmpty, IsNumber, Min } from 'class-validator';
+import { IsString, IsNumber } from 'class-validator';
 import { Expose } from 'class-transformer';
 
-class ProductModifyDto {
+class ProductFieldsDto {
   @IsString()
-  @IsNotEmpty()
   @Expose()
   readonly name: string;
 
   @IsNumber()
-  @IsNotEmpty()
-  @Min(0)
   @Expose()
   readonly price: number;
 }
 
-export class ProductDto extends ProductModifyDto {
-  @IsNumber()
-  @IsNotEmpty()
+export class ProductDto extends ProductFieldsDto {
+  @IsString()
   @Expose()
   readonly id: number;
 }
 
-export class CreateProductDto extends ProductModifyDto {}
+export class CreateProductDto extends ProductFieldsDto {}
 
-export class UpdateProductDto extends ProductModifyDto {}
+export class UpdateProductDto extends ProductFieldsDto {}
