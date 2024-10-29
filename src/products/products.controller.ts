@@ -1,18 +1,19 @@
 import { Controller, Get, Post, Patch, Delete } from '@nestjs/common';
-import { Body, Param } from '@nestjs/common';
+import { Body, Param, Query } from '@nestjs/common';
+import { CatchDBValidationError } from 'src/app.exceptions';
+import { PaginationDto } from 'src/app.pagination.dto';
 import { ProductDto, CreateProductDto, UpdateProductDto } from './products.dto';
 import { ProductsService } from './products.service';
 import { Product } from './products.model';
 import { plainToInstance } from 'class-transformer';
-import { CatchDBValidationError } from 'src/app.exceptions';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  async index(): Promise<ProductDto[]> {
-    const products = await this.productsService.all();
+  async index(@Query() pagination: PaginationDto): Promise<ProductDto[]> {
+    const products = await this.productsService.search(pagination);
 
     return products.map((product) => this._serialize(product));
   }

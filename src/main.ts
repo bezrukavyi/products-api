@@ -12,4 +12,6 @@ async function bootstrap() {
 }
 bootstrap();
 
-mongoose.set('debug', true);
+if (process.env.DEBUG_DB === 'true') {
+  mongoose.set('debug', true);
+}

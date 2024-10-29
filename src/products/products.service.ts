@@ -4,6 +4,7 @@ import { Model, isValidObjectId } from 'mongoose';
 import { CreateProductDto, UpdateProductDto } from './products.dto';
 import { Product } from './products.model';
 import { NotFoundException } from 'src/app.exceptions';
+import { PaginationDto, parseSortField } from 'src/app.pagination.dto';
 
 @Injectable()
 export class ProductsService {
@@ -12,8 +13,17 @@ export class ProductsService {
     private readonly productModel: Model<Product>,
   ) {}
 
-  all(): Promise<any[]> {
-    return this.productModel.find().exec();
+  search(pagination: PaginationDto): Promise<any[]> {
+    const { limit, page, sort } = pagination;
+    const offset = (page - 1) * limit;
+    const sortProperty = parseSortField(sort, ['name', 'price']);
+
+    return this.productModel
+      .find()
+      .skip(offset)
+      .limit(limit)
+      .sort(sortProperty)
+      .exec();
   }
 
   async find(id: string): Promise<Product> {
