@@ -3,8 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, isValidObjectId } from 'mongoose';
 import { CreateProductDto, UpdateProductDto } from './products.dto';
 import { Product } from './products.model';
-import { NotFoundException } from 'src/app.exceptions';
-import { PaginationDto, parseSortField } from 'src/app.pagination.dto';
+import { NotFoundException } from 'app.exceptions';
+import { PaginationDto, parseSortField } from 'app.pagination.dto';
 
 @Injectable()
 export class ProductsService {
