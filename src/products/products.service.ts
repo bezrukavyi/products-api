@@ -1,58 +1,44 @@
 import { Injectable } from '@nestjs/common';
-import { CreateProductDto, UpdateProductDto, ProductDto } from './products.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { CreateProductDto, UpdateProductDto } from './products.dto';
+import { Product } from './products.model';
 
 @Injectable()
 export class ProductsService {
-  private products = [
-    { id: 1, name: 'string1', price: 19.2 },
-    { id: 2, name: 'string2', price: 20.2 },
-  ];
+  constructor(
+    @InjectModel('Product')
+    private readonly productModel: Model<Product>,
+  ) {}
 
-  all(): ProductDto[] {
-    return this.products;
+  all(): Promise<any[]> {
+    return this.productModel.find().exec();
   }
 
-  find(id: number): ProductDto {
-    const product = this.products.find((product) => product.id == id);
+  async find(id: number): Promise<Product> {
+    const product = await this.productModel.findById(id).exec();
 
-    if (!product) {
-      throw 'Not found';
-    }
+    if (!product) throw 'Not found';
 
     return product;
   }
 
-  create(input: CreateProductDto): ProductDto {
-    const newProduct = { id: Math.floor(Math.random() * 999999999), ...input };
-    this.products.push(newProduct);
-    return newProduct;
+  async create(input: CreateProductDto): Promise<any> {
+    const newProduct = new this.productModel(input);
+    return await newProduct.save();
   }
 
-  update(id: number, input: UpdateProductDto): ProductDto {
-    const product = this.products.find((product) => product.id == id);
+  async update(id: number, input: UpdateProductDto): Promise<any> {
+    const product = await this.find(id);
 
-    if (!id) {
-      throw 'Not found';
-    }
+    Object.assign(product, input);
 
-    const updatedProduct = { ...product, ...input };
-
-    this.products.reduce((product) => {
-      return product.id == updatedProduct.id ? updatedProduct : product;
-    });
-
-    return updatedProduct;
+    return await product.save();
   }
 
-  delete(id: number): boolean {
-    const product = this.products.find((product) => product.id == id);
+  async delete(id: number): Promise<boolean> {
+    const result = await this.productModel.deleteOne({ _id: id });
 
-    if (!id) {
-      return false;
-    }
-
-    this.products = this.products.filter((product) => product.id == id);
-
-    return true;
+    return result.deletedCount === 1;
   }
 }

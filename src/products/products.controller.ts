@@ -2,37 +2,37 @@ import { Controller, Get, Post, Patch, Delete } from '@nestjs/common';
 import { Body, Param } from '@nestjs/common';
 import { ProductDto, CreateProductDto, UpdateProductDto } from './products.dto';
 import { ProductsService } from './products.service';
+import { Product } from './products.model';
 
 @Controller('products')
 export class ProductsController {
-  private productsService: ProductsService;
-
-  constructor() {
-    this.productsService = new ProductsService();
-  }
+  constructor(private readonly productsService: ProductsService) {}
 
   @Get(':id')
-  show(@Param() id: number): ProductDto {
+  async show(@Param() id: number): Promise<Product> {
     return this.productsService.find(id);
   }
 
   @Get()
-  index(): ProductDto[] {
+  async index(): Promise<ProductDto[]> {
     return this.productsService.all();
   }
 
   @Post()
-  create(@Body() params: CreateProductDto): ProductDto {
+  async create(@Body() params: CreateProductDto): Promise<Product> {
     return this.productsService.create(params);
   }
 
   @Patch(':id')
-  update(@Param() id: number, @Body() params: UpdateProductDto): ProductDto {
+  async update(
+    @Param() id: number,
+    @Body() params: UpdateProductDto,
+  ): Promise<Product> {
     return this.productsService.update(id, params);
   }
 
   @Delete(':id')
-  delete(@Param() id: number): boolean {
-    return this.productsService.delete(id);
+  async delete(@Param() id: number): Promise<boolean> {
+    return await this.productsService.delete(id);
   }
 }
