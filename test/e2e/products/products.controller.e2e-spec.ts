@@ -89,6 +89,6 @@ describe('ProductsController', () => {
     const result = await productsController.delete(productId);
     expect(result).toBe(true);
 
-    await expect(productsController.show(productId)).rejects.toThrow(); // Should throw NotFoundException
+    await expect(productsController.show(productId)).rejects.toThrow();
   });
 });

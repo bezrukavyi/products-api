@@ -4,13 +4,24 @@ import {
   UnauthorizedException,
   ForbiddenException,
   mixin,
+  Injectable,
+  Type,
 } from '@nestjs/common';
-import { TokensService, PermissionType } from '../services/tokens.service';
+import { JwtService } from '../services/jwt.service';
 
-export const PermissionsGuard = (
+export type PermissionType = 'readOnly' | 'readWrite';
+
+type TokenPayload = {
+  permission: PermissionType;
+};
+
+export function PermissionsGuard(
   requiredPermission: PermissionType,
-): CanActivate => {
+): Type<CanActivate> {
+  @Injectable()
   class PermissionsGuardMixin implements CanActivate {
+    constructor(private readonly JwtService: JwtService) {} // Inject JwtService
+
     async canActivate(context: ExecutionContext): Promise<boolean> {
       if (!requiredPermission) {
         return true;
@@ -23,9 +34,12 @@ export const PermissionsGuard = (
         throw new UnauthorizedException('Token is missing');
       }
 
-      const tokensService = new TokensService();
+      // Use the injected JwtService instance
+      const decoded = this.JwtService.verifyToken(token) as TokenPayload;
 
-      const decoded = tokensService.verifyToken(token);
+      if (!decoded) {
+        throw new UnauthorizedException('Invalid token');
+      }
 
       switch (requiredPermission) {
         case 'readWrite':
@@ -46,6 +60,5 @@ export const PermissionsGuard = (
     }
   }
 
-  const guard = mixin(PermissionsGuardMixin);
-  return guard as unknown as CanActivate;
-};
+  return mixin(PermissionsGuardMixin);
+}

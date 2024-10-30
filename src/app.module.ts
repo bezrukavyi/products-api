@@ -1,14 +1,18 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from 'src/app.controller';
 import { AppService } from 'src/app.service';
+import { CommonModule } from './common/common.module';
+import { DatabaseModule } from './database/database.module';
 import { ProductsModule } from './modules/products/products.module';
 
 @Module({
   imports: [
-    MongooseModule.forRoot(
-      `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}/${process.env.MONGO_DATABASE}`,
-    ),
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    CommonModule,
+    DatabaseModule,
     ProductsModule,
   ],
   controllers: [AppController],
