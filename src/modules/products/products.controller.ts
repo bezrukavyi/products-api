@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Patch, Delete } from '@nestjs/common';
 import { Body, Param, Query, UseGuards } from '@nestjs/common';
-import { CatchDBValidationError } from 'app.exceptions';
-import { PaginationDto } from 'app.pagination.dto';
-import { PermissionsGuard } from '../permissions/permissions.guard';
+import { CatchDatabaseValidationError } from 'src/common/decorators/CatchDatabaseValidationError.decorator';
+import { PaginationDto } from 'src/app.pagination.dto';
+import { PermissionsGuard } from 'src/common/guards/permissions.guard';
 import { ProductDto, CreateProductDto, UpdateProductDto } from './products.dto';
 import { ProductsService } from './products.service';
 import { Product } from './products.model';
@@ -28,14 +28,14 @@ export class ProductsController {
 
   @Post()
   @UseGuards(PermissionsGuard('readWrite'))
-  @CatchDBValidationError()
+  @CatchDatabaseValidationError()
   async create(@Body() params: CreateProductDto): Promise<ProductDto> {
     return this.serialize(await this.productsService.create(params));
   }
 
   @Patch(':id')
   @UseGuards(PermissionsGuard('readWrite'))
-  @CatchDBValidationError()
+  @CatchDatabaseValidationError()
   async update(
     @Param('id') id: string,
     @Body() params: UpdateProductDto,

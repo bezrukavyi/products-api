@@ -1,13 +1,7 @@
 import mongoose from 'mongoose';
-import { BadRequestException, HttpException, HttpStatus } from '@nestjs/common';
+import { BadRequestException } from '@nestjs/common';
 
-export class NotFoundException extends HttpException {
-  constructor(message: string) {
-    super(message || 'Not Found', HttpStatus.NOT_FOUND);
-  }
-}
-
-export function CatchDBValidationError() {
+export function CatchDatabaseValidationError() {
   return function (
     _target: any,
     _propertyKey: string,

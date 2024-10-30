@@ -5,7 +5,7 @@ import {
   ForbiddenException,
   mixin,
 } from '@nestjs/common';
-import { TokensService, PermissionType } from '../tokens/tokens.service';
+import { TokensService, PermissionType } from '../services/tokens.service';
 
 export const PermissionsGuard = (
   requiredPermission: PermissionType,

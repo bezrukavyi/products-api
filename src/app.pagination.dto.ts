@@ -9,13 +9,11 @@ import {
 import { Type } from 'class-transformer';
 
 export class PaginationDto {
-  @IsOptional()
   @IsInt()
   @Min(1)
   @Type(() => Number)
   page: number = 1;
 
-  @IsOptional()
   @IsInt()
   @Min(1)
   @Max(10000)
@@ -24,13 +22,12 @@ export class PaginationDto {
 
   @IsOptional()
   @IsString()
-  @IsString({ each: true })
   @Matches(/^[a-zA-Z0-9_]+:(asc|desc)$/, {
     each: true,
     message:
       'Invalid sort format. Each entry should be in the format field:asc|desc',
   })
-  sort: string;
+  sort?: string;
 }
 
 export const parseSortField = (sortField: string, whiteList: string[] = []) => {

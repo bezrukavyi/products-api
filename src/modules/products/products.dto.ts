@@ -1,7 +1,7 @@
 import { IsString, IsNumber } from 'class-validator';
 import { Expose } from 'class-transformer';
 
-class ProductFieldsDto {
+export class ProductFieldsDto {
   @IsString()
   @Expose()
   readonly name: string;
@@ -14,7 +14,7 @@ class ProductFieldsDto {
 export class ProductDto extends ProductFieldsDto {
   @IsString()
   @Expose()
-  readonly id: number;
+  readonly id: string;
 }
 
 export class CreateProductDto extends ProductFieldsDto {}

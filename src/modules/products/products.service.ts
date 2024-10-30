@@ -3,8 +3,8 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, isValidObjectId } from 'mongoose';
 import { CreateProductDto, UpdateProductDto } from './products.dto';
 import { Product } from './products.model';
-import { NotFoundException } from 'app.exceptions';
-import { PaginationDto, parseSortField } from 'app.pagination.dto';
+import { NotFoundException } from 'src/common/exceptions/NotFoundException';
+import { PaginationDto, parseSortField } from 'src/app.pagination.dto';
 
 @Injectable()
 export class ProductsService {
@@ -37,8 +37,8 @@ export class ProductsService {
   }
 
   async create(input: CreateProductDto): Promise<any> {
-    const newProduct = new this.productModel(input);
-    return await newProduct.save();
+    const newProduct = this.productModel.create(input);
+    return newProduct;
   }
 
   async update(id: string, input: UpdateProductDto): Promise<any> {
