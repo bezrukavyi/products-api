@@ -7,9 +7,7 @@ import { faker } from '@faker-js/faker';
 
 @Injectable()
 export class ProductSeeder implements Seeder {
-  constructor(
-    @InjectModel('Product') private readonly productModel: Model<Product>,
-  ) {}
+  constructor(@InjectModel('Product') private readonly productModel: Model<Product>) {}
 
   async seed(): Promise<any> {
     const products = Array.from({ length: 10 }, () => ({

@@ -7,7 +7,7 @@ import {
   Injectable,
   Type,
 } from '@nestjs/common';
-import { JwtService } from '../services/jwt.service';
+import { JwtService } from '../services/Jwt.service';
 
 export type PermissionType = 'readOnly' | 'readWrite';
 
@@ -15,12 +15,10 @@ type TokenPayload = {
   permission: PermissionType;
 };
 
-export function PermissionsGuard(
-  requiredPermission: PermissionType,
-): Type<CanActivate> {
+export function PermissionsGuard(requiredPermission: PermissionType): Type<CanActivate> {
   @Injectable()
   class PermissionsGuardMixin implements CanActivate {
-    constructor(private readonly JwtService: JwtService) {} // Inject JwtService
+    constructor(private readonly JwtService: JwtService) {}
 
     async canActivate(context: ExecutionContext): Promise<boolean> {
       if (!requiredPermission) {
@@ -34,7 +32,6 @@ export function PermissionsGuard(
         throw new UnauthorizedException('Token is missing');
       }
 
-      // Use the injected JwtService instance
       const decoded = this.JwtService.verifyToken(token) as TokenPayload;
 
       if (!decoded) {

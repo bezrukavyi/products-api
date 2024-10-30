@@ -4,7 +4,7 @@ import { getModelToken } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Product } from 'src/modules/products/products.model';
 import { NotFoundException } from 'src/common/exceptions/NotFoundException';
-import { PaginationDto } from 'src/app.pagination.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 import {
   CreateProductDto,
   UpdateProductDto,

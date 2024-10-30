@@ -1,5 +1,4 @@
-import { Schema } from 'mongoose';
-import { Document } from 'mongoose';
+import { Document, Schema } from 'mongoose';
 
 export const ProductSchema = new Schema({
   name: {

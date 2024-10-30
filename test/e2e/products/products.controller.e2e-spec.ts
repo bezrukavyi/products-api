@@ -3,7 +3,7 @@ import { ProductsController } from 'src/modules/products/products.controller';
 import { ProductsService } from 'src/modules/products/products.service';
 import { ProductSchema } from 'src/modules/products/products.model';
 import { ProductSeeder } from 'src/database/seeds/products.seeder';
-import { PermissionsGuard } from 'src/common/guards/permissions.guard';
+import { PermissionsGuard } from 'src/common/guards/Permissions.guard';
 import { MongooseModule } from '@nestjs/mongoose';
 import { rootMongooseTestModule } from '../../utils/mongoose-test-utils';
 

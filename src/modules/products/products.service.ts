@@ -4,7 +4,7 @@ import { Model, isValidObjectId } from 'mongoose';
 import { CreateProductDto, UpdateProductDto } from './products.dto';
 import { Product } from './products.model';
 import { NotFoundException } from 'src/common/exceptions/NotFoundException';
-import { PaginationDto, parseSortField } from 'src/app.pagination.dto';
+import { PaginationDto, parseSortField } from 'src/common/dto/pagination.dto';
 
 @Injectable()
 export class ProductsService {
@@ -18,12 +18,7 @@ export class ProductsService {
     const offset = (page - 1) * limit;
     const sortProperty = parseSortField(sort, ['name', 'price']);
 
-    return this.productModel
-      .find()
-      .skip(offset)
-      .limit(limit)
-      .sort(sortProperty)
-      .exec();
+    return this.productModel.find().skip(offset).limit(limit).sort(sortProperty).exec();
   }
 
   async find(id: string): Promise<Product> {
@@ -42,6 +37,8 @@ export class ProductsService {
   }
 
   async update(id: string, input: UpdateProductDto): Promise<any> {
+    if (!isValidObjectId(id)) throw new NotFoundException('Product not found');
+
     const product = await this.find(id);
 
     product.set(input);
@@ -50,6 +47,8 @@ export class ProductsService {
   }
 
   async delete(id: string): Promise<boolean> {
+    if (!isValidObjectId(id)) throw new NotFoundException('Product not found');
+
     await this.productModel.findById(id);
 
     const result = await this.productModel.deleteOne({ _id: id });
