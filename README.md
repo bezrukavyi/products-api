@@ -6,15 +6,15 @@ A NestJS-based API for managing product data, featuring endpoints for creating, 
   - [Core Dependencies](#core-dependencies)
   - [How to run](#how-to-run)
   - [How to use](#how-to-use)
+  - [Authentication](#authentication)
     - [Tokens examples](#tokens-examples)
       - [readWrite](#readwrite)
       - [readOnly](#readonly)
   - [Development](#development)
-    - [Generate data](#generate-data)
   - [Run tests](#run-tests)
+  - [Generate data](#generate-data)
   - [Compile and run the project](#compile-and-run-the-project)
   - [API Documentation](#api-documentation)
-  - [Authentication](#authentication)
     - [Permissions](#permissions)
     - [Usage](#usage)
     - [Private and Public keys](#private-and-public-keys)
@@ -49,6 +49,10 @@ The documentation will be available at `http://localhost:3001/api/docs`
 Please see documentation from [API Documentation](#api-documentation) section below.
 You can use tokens from the [Tokens examples](#tokens-examples) section below.
 
+## Authentication
+
+This section provides JWT tokens for access permissions. Use these tokens to authenticate and authorize actions within the system, based on the required access level.
+
 ### Tokens examples
 
 #### readWrite
@@ -78,54 +82,54 @@ After that you can run the following command to start the `development` environm
 cp .env.example .env
 
 # Install dependencies
-$ npm install
+npm install
 
 # Run development env
-$ npm run start
-```
-
-### Generate data
-
-From docker:
-
-```bash
-$ docker exec -it nestjs npm run seed:products
-```
-
-From local:
-
-```bash
-# Install dependencies
-$ npm install
-
-# Seed data
-$ npm run seed:products
+npm run start
 ```
 
 ## Run tests
 
 ```bash
 # all tests
-$ npm run test
+npm run test
 
 # unit tests
-$ npm run test:e2e
+npm run test:unit
 
 # e2e tests
-$ npm run test:e2e
+npm run test:e2e
 
 # test coverage
-$ npm run test:cov
+npm run test:cov
+```
+
+## Generate data
+
+From docker:
+
+```bash
+docker exec -it nestjs npm run seed:products
+```
+
+From local:
+
+```bash
+# Install dependencies
+npm install
+
+# Seed data
+npm run seed:products
 ```
 
 ## Compile and run the project
 
 ```bash
 # watch mode
-$ npm run start:dev
+npm run start:dev
 
 # production mode
-$ npm run start:prod
+npm run start:prod
 ```
 
 ## API Documentation
@@ -137,10 +141,6 @@ Access the API docs at:
 ```
 http://localhost:3001/api/docs
 ```
-
-## Authentication
-
-This section provides JWT tokens for access permissions. Use these tokens to authenticate and authorize actions within the system, based on the required access level.
 
 ### Permissions
 
@@ -162,13 +162,13 @@ Private and public keys are stored in the .env file as JWT_PRIVATE_KEY and JWT_P
 To generate these keys, you can use the following commands:
 
 ```bash
-$ openssl genpkey -algorithm RSA -out private.key
-$ openssl rsa -pubout -in private.key -out public.key
+openssl genpkey -algorithm RSA -out private.key
+openssl rsa -pubout -in private.key -out public.key
 ```
 
 ## Deployment
 
 ```bash
-$ npm install -g mau
-$ mau deploy
+npm install -g mau
+mau deploy
 ```
