@@ -154,7 +154,7 @@ describe('ProductsService', () => {
 
     it('should return false if product was not deleted', async () => {
       model.deleteOne = jest.fn().mockResolvedValue({ deletedCount: 0 });
-      const result = await service.delete('nonexistentId');
+      const result = await service.delete('507f191e810c19729de860ea');
 
       expect(result).toBe(false);
     });

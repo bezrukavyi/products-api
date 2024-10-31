@@ -7,7 +7,7 @@ import {
   Injectable,
   Type,
 } from '@nestjs/common';
-import { JwtService } from '../services/Jwt.service';
+import { JwtService } from '../services/jwt.service';
 
 export type PermissionType = 'readOnly' | 'readWrite';
 
@@ -29,10 +29,16 @@ export function PermissionsGuard(requiredPermission: PermissionType): Type<CanAc
       const token = request.headers['authorization']?.split(' ')[1];
 
       if (!token) {
-        throw new UnauthorizedException('Token is missing');
+        throw new UnauthorizedException('Invalid token');
       }
 
-      const decoded = this.JwtService.verifyToken(token) as TokenPayload;
+      let decoded: TokenPayload;
+
+      try {
+        decoded = this.JwtService.verifyToken(token);
+      } catch (error) {
+        throw new UnauthorizedException('Invalid token');
+      }
 
       if (!decoded) {
         throw new UnauthorizedException('Invalid token');

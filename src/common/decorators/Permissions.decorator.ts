@@ -7,7 +7,7 @@ export function Permissions(permission: PermissionType) {
     UseGuards(PermissionsGuard(permission)),
     ApiBearerAuth(),
     ApiResponse({ status: 200, description: 'Success' }),
-    ApiResponse({ status: 403, description: 'Forbidden: insufficient permissions' }),
-    ApiResponse({ status: 401, description: 'Unauthorized: token is missing or invalid' }),
+    ApiResponse({ status: 403, description: 'Forbidden: Insufficient permissions' }),
+    ApiResponse({ status: 401, description: 'Unauthorized: Invalid token' }),
   );
 }

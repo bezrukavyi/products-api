@@ -9,6 +9,7 @@ export class JwtService {
 
   generateToken(payload: any) {
     const privateKey = this.configService.get<string>('JWT_PRIVATE_KEY');
+
     if (!privateKey) {
       throw new Error('JWT_PRIVATE_KEY is not defined');
     }
@@ -21,6 +22,7 @@ export class JwtService {
 
   verifyToken(token: string): JwtPayload | null {
     const publicKey = this.configService.get<string>('JWT_PUBLIC_KEY');
+
     if (!publicKey) {
       throw new Error('JWT_PUBLIC_KEY is not defined');
     }

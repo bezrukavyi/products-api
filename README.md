@@ -1,6 +1,55 @@
-## Description
+# Products API
 
-### Permissions
+A NestJS-based API for managing product data, featuring endpoints for creating, updating, retrieving, and deleting products. Built with MongoDB via Mongoose, JWT for authentication, and Swagger for API documentation.
+
+- [Products API](#products-api)
+  - [Core Dependencies](#core-dependencies)
+  - [How to run](#how-to-run)
+  - [How to use](#how-to-use)
+    - [Tokens examples](#tokens-examples)
+      - [readWrite](#readwrite)
+      - [readOnly](#readonly)
+  - [Development](#development)
+    - [Generate data](#generate-data)
+  - [Run tests](#run-tests)
+  - [Compile and run the project](#compile-and-run-the-project)
+  - [API Documentation](#api-documentation)
+  - [Authentication](#authentication)
+    - [Permissions](#permissions)
+    - [Usage](#usage)
+    - [Private and Public keys](#private-and-public-keys)
+  - [Deployment](#deployment)
+
+## Core Dependencies
+
+- **NestJS**: Primary framework for building scalable server-side applications.
+- **jsonwebtoken**: Library for handling JWT-based authentication.
+- **mongoose**: Object Data Modeling (ODM) library for MongoDB integration.
+- **@nestjs/swagger**: Auto-generates API documentation.
+- **Docker**: Containerization platform for easy deployment.
+
+## How to run
+
+```bash
+$ cp .env.example .env
+
+# Run server
+$ docker-compose -p products-api up --build
+
+# Generate data
+docker exec -it nestjs npm run seed:products
+```
+
+## How to use
+
+After that the API will be available at `http://localhost:3001`
+
+The documentation will be available at `http://localhost:3001/api/docs`
+
+Please see documentation from [API Documentation](#api-documentation) section below.
+You can use tokens from the [Tokens examples](#tokens-examples) section below.
+
+### Tokens examples
 
 #### readWrite
 
@@ -14,30 +63,53 @@ eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJtaXNzaW9uIjoicmVhZFdyaXRlIiwiaWF0Ijo
 eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJwZXJtaXNzaW9uIjoicmVhZE9ubHkiLCJpYXQiOjE3MzAyNDA0MjYsImV4cCI6MTczMjgzMjQyNn0.h7xe_OvjwxxxelwVVcZjXK2lMfHjp6eFXR9sP0Kl35xHmC78aESBEJnnogBoMJzGgVE_BJRpjh6YJl7dKhyEXJDuYoYVk7V-N6DqfwQ9DxyWWcPOPg1-MOmfFxJvmPv2CtMzgDw3KIZsrQbTvC5ZUuBgfoKKufAVozpKnHgjDWBetWhi1j51qgKrt6ZReBw4AF5uqsdkfRH5EEEplehTemsq85M67fBe-mYi0htU2qEpbC3Pg1klA8ALg2vfnp_Q9USRM8IXoIoyG2BrnbFoTeMv0Pdl3J-flKjkolh0W_SiCvUE91CcGjTTs06UaxbW-BFVZzBTuvhR_XJchjGE8Q
 ```
 
-## Project setup
+## Development
+
+Run the following command to run MongoDB in a Docker container:
 
 ```bash
-$ npm install
+docker-compose -p products-api -f docker-compose.mongo.yml up --build
 ```
 
-## Compile and run the project
+After that you can run the following command to start the `development` environment:
 
 ```bash
-# development
+# Init env file
+cp .env.example .env
+
+# Install dependencies
+$ npm install
+
+# Run development env
 $ npm run start
+```
 
-# watch mode
-$ npm run start:dev
+### Generate data
 
-# production mode
-$ npm run start:prod
+From docker:
+
+```bash
+$ docker exec -it nestjs npm run seed:products
+```
+
+From local:
+
+```bash
+# Install dependencies
+$ npm install
+
+# Seed data
+$ npm run seed:products
 ```
 
 ## Run tests
 
 ```bash
-# unit tests
+# all tests
 $ npm run test
+
+# unit tests
+$ npm run test:e2e
 
 # e2e tests
 $ npm run test:e2e
@@ -46,11 +118,55 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Compile and run the project
+
+```bash
+# watch mode
+$ npm run start:dev
+
+# production mode
+$ npm run start:prod
+```
+
+## API Documentation
+
+The API Documentation is generated with **@nestjs/swagger** for easy API reference and testing.
+
+Access the API docs at:
+
+```
+http://localhost:3001/api/docs
+```
+
+## Authentication
+
+This section provides JWT tokens for access permissions. Use these tokens to authenticate and authorize actions within the system, based on the required access level.
+
+### Permissions
+
+- **readWrite**: Grants both read and write access to resources.
+- **readOnly**: Grants only read access to resources.
+
+### Usage
+
+To use the tokens, include them in the `Authorization` header of your requests as follows:
+
+```http
+Authorization: Bearer <TOKEN>
+```
+
+### Private and Public keys
+
+Private and public keys are stored in the .env file as JWT_PRIVATE_KEY and JWT_PUBLIC_KEY
+
+To generate these keys, you can use the following commands:
+
+```bash
+$ openssl genpkey -algorithm RSA -out private.key
+$ openssl rsa -pubout -in private.key -out public.key
+```
+
 ## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
 
 ```bash
 $ npm install -g mau

@@ -2,9 +2,6 @@ import { IsInt, IsOptional, IsString, Min, Max, Matches } from 'class-validator'
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
-// Custom type for sort direction
-type SortOrder = 'asc' | 'desc';
-
 export class PaginationDto {
   @ApiProperty({ example: 1, description: 'Page number', minimum: 1 })
   @IsInt()
@@ -37,19 +34,28 @@ export class PaginationDto {
   sort?: string;
 }
 
-// Utility function to parse sort field and order
-export const parseSortField = (sortField: string, whiteList: string[] = []) => {
-  return sortField
-    ? sortField.split(',').reduce(
-        (acc, sortItem) => {
-          const [field, order] = sortItem.split(':');
-          if (!whiteList.includes(field)) {
+export const parseSortField = (sortField: string | string[], whiteList: string[] = []) => {
+  const parseField = (field) => {
+    return field
+      ? field.split(',').reduce(
+          (acc, sortItem) => {
+            const [field, order] = sortItem.split(':');
+            if (!whiteList.includes(field)) {
+              return acc;
+            }
+            acc[field] = order === 'asc' ? 1 : -1;
             return acc;
-          }
-          acc[field] = order === 'asc' ? 1 : -1;
-          return acc;
-        },
-        {} as Record<string, 1 | -1>,
-      )
-    : {};
+          },
+          {} as Record<string, 1 | -1>,
+        )
+      : {};
+  };
+
+  if (Array.isArray(sortField)) {
+    return sortField.reduce((acc, field) => {
+      return { ...acc, ...parseField(field) };
+    }, {});
+  } else {
+    return parseField(sortField);
+  }
 };

@@ -12,7 +12,7 @@ export const ProductSchema = new Schema({
     type: Number,
     required: [true, 'Product price is required'],
     min: [0, 'Product price must be a positive number'],
-    max: [10000, 'Product price must not exceed 10,000'],
+    max: [1000000, 'Product price must not exceed 1,000,000'],
   },
 });
 
